@@ -1,34 +1,22 @@
-# This is a basic workflow to help you get started with Actions
-
-name: Github Actions Manual Approval
-
-# Controls when the workflow will run
+name: main
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
+    name: build
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
-
-      # Runs a single command using the runners shell
-      - name: Introduction
-        run: echo Hello, world!
-
-      - name: Manual Workflow Approval
-        uses: trstringer/manual-approval@v1.9.1
-
-      - name: Conclusion.
-        run: echo "Manual Workflow Approval Worked"
+      - name: Build
+        run: echo building
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: trstringer,acdunnigan
+      - name: Deploy to production
+        run: echo deploying
