@@ -2,6 +2,9 @@ name: main
 on:
   workflow_dispatch:
 
+permissions:
+  issues: write
+
 jobs:
   build:
     name: build
@@ -17,5 +20,6 @@ jobs:
       - uses: trstringer/manual-approval@v1
         with:
           secret: ${{ github.TOKEN }}
+          approvers: om-sai-coder
       - name: Deploy to production
         run: echo deploying
